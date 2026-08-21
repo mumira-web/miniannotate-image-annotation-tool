@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MiniAnnotate – Image Annotation & Quality Review Tool</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Top Navigation & Header -->
+  <header class="app-header">
+    <div class="header-branding">
+      <div class="logo-icon">&#x25A2;</div>
+      <div>
+        <h1>MiniAnnotate</h1>
+        <p class="subtitle">Image Annotation & Quality Review Tool</p>
+      </div>
+    </div>
+    <div class="header-badge">
+      <span class="role-pill">Supervisor Review Mode</span>
+    </div>
+  </header>
+
+  <!-- Controls Toolbar -->
+  <nav class="toolbar">
+    <div class="toolbar-group">
+      <label for="imageUpload" class="btn btn-primary file-label">
+        <span class="icon">&#x1F4C2;</span> Upload Image
+      </label>
+      <input type="file" id="imageUpload" accept="image/*" class="visually-hidden" />
+      <span id="fileNameDisplay" class="file-name-text">No image loaded</span>
+    </div>
+
+    <!-- Domain Mode Selector (Football Analytics vs General Objects) -->
+    <div class="toolbar-group">
+      <label for="domainModeSelect" class="toolbar-label">Domain:</label>
+      <select id="domainModeSelect" class="form-select">
+        <option value="football" selected>⚽ Football Match Analytics</option>
+        <option value="general">🚗 General Street Objects</option>
+      </select>
+    </div>
+
+    <div class="toolbar-group">
+      <label for="labelSelect" class="toolbar-label">Active Label:</label>
+      <select id="labelSelect" class="form-select">
+        <!-- Dynamically populated based on selected domain -->
+      </select>
+    </div>
+
+    <div class="toolbar-actions">
+      <button id="exportJsonBtn" class="btn btn-secondary">
+        <span class="icon">&#x2B07;</span> Export JSON
+      </button>
+      <button id="clearAllBtn" class="btn btn-danger">
+        <span class="icon">&#x1F5D1;</span> Clear All
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Application Layout -->
+  <main class="app-layout">
+    <!-- Left Workspace: Canvas Area -->
+    <section class="workspace-area">
+      <div class="workspace-header">
+        <h2>Annotation Canvas</h2>
+        <div id="imageInfo" class="image-info-tag">Original: -- &times; -- px</div>
+      </div>
+
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="annotationCanvas"></canvas>
+        <div id="emptyStatePrompt" class="empty-state">
+          <div class="empty-icon">&#x26BD;</div>
+          <h3>No Image Loaded</h3>
+          <p>Click <strong>Upload Image</strong> above or load one of our built-in benchmark scenes to start annotating and auditing.</p>
+          <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+            <button id="loadFootballBtn" class="btn btn-primary">⚽ Load Football Match</button>
+            <button id="loadSampleBtn" class="btn btn-outline">🚗 Load Street Scene</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="canvas-statusbar">
+        <span id="canvasStatusText">Ready. Select a label and drag on the image to draw.</span>
+        <span id="cursorCoords">X: 0 | Y: 0 (original px)</span>
+      </div>
+    </section>
+
+    <!-- Right Sidebar: Quality Summary & Annotation Review List -->
+    <aside class="sidebar-area">
+      <!-- Quality Summary Metric Cards -->
+      <section class="quality-summary-card">
+        <h3>Quality Summary</h3>
+        <p class="section-desc">Real-time status breakdown for data acceptance</p>
+        <div class="summary-metrics-grid">
+          <div class="metric-box total">
+            <span class="metric-value" id="summaryTotal">0</span>
+            <span class="metric-label">Total</span>
+          </div>
+          <div class="metric-box pending">
+            <span class="metric-value" id="summaryPending">0</span>
+            <span class="metric-label">Pending</span>
+          </div>
+          <div class="metric-box approved">
+            <span class="metric-value" id="summaryApproved">0</span>
+            <span class="metric-label">Approved</span>
+          </div>
+          <div class="metric-box needs-correction">
+            <span class="metric-value" id="summaryCorrection">0</span>
+            <span class="metric-label">Needs Fix</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Review Section -->
+      <section class="review-section">
+        <div class="review-header">
+          <h3>Annotations Review</h3>
+          <span id="annotationCountBadge" class="count-pill">0 items</span>
+        </div>
+        <p class="section-desc">Inspect bounding boxes and supervise label quality</p>
+
+        <!-- Dynamic List of Annotations -->
+        <div id="annotationList" class="annotation-list">
+          <div class="no-annotations-msg">
+            No bounding boxes drawn yet. Click and drag on the image to create annotations.
+          </div>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
